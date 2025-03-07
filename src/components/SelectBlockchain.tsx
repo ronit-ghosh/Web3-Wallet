@@ -8,7 +8,7 @@ export default function SelectBlockchain() {
     
     return (
         <div className="min-h-screen flex items-center justify-center">
-            <Card className="w-full max-w-md bg-[#1c1c1c] border-none shadow-xl overflow-hidden">
+            <Card className="w-full max-w-md bg-[#1c1c1c] border-none shadow-xl overflow-hidden mx-4">
                 <div className="px-4 pb-4 border-b border-[#2c2c2c] flex justify-between items-center">
                     <Button variant="ghost" size="icon" className="cursor-pointer">
                         <ArrowLeft className="h-5 w-5" />

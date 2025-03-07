@@ -6,6 +6,7 @@ import { generateMnemonic, mnemonicToSeedSync } from "bip39";
 import { derivePath } from "ed25519-hd-key";
 import { Keypair } from "@solana/web3.js";
 import bs58 from "bs58";
+import { ethers } from "ethers";
 
 type keyContextType = {
     createMnemonic: () => void
@@ -59,15 +60,20 @@ export function KeyProvider({ children }: { children: React.ReactNode }) {
     function createKeyPairs(derivationPath: '501' | '60') {
         if (!mnemonic) createMnemonic()
         const seed = mnemonicToSeedSync(mnemonic);
-
-        const path = `m/44'/${derivationPath}'/${keypairs.length + 1}'/0'`;
-
+        const path = `m/44'/${derivationPath}'/${keypairs.length + 1}'`;
         const derivedSeed = derivePath(path, seed.toString("hex")).key;
 
-        const secret = nacl.sign.keyPair.fromSeed(derivedSeed).secretKey
+        let publicKey: string = '';
+        let privateKey: string = '';
 
-        const publicKey = Keypair.fromSecretKey(secret).publicKey.toBase58()
-        const privateKey = bs58.encode(secret)
+        if (derivationPath === '501') {
+            const { secretKey } = nacl.sign.keyPair.fromSeed(derivedSeed)
+            publicKey = Keypair.fromSecretKey(secretKey).publicKey.toBase58()
+            privateKey = bs58.encode(secretKey)
+        } else if (derivationPath === '60') {
+            privateKey = Buffer.from(derivedSeed).toString('hex')
+            publicKey = new ethers.Wallet(privateKey).address
+        }
 
         const newKeypairs: KeyPairs = {
             type: derivationPath,

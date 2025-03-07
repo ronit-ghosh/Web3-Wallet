@@ -1,7 +1,6 @@
 "use client"
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
 import { useKey } from "./key-provider";
 import { useEffect } from "react";
 import { ArrowUp } from "lucide-react";
@@ -12,7 +11,7 @@ export default function Mnemonic({ next }: { next: () => void }) {
 
     useEffect(() => {
         createMnemonic()
-    }, [createMnemonic])
+    }, [])
 
     function handleCopy() {
         navigator.clipboard.writeText(mnemonic)
@@ -44,12 +43,6 @@ export default function Mnemonic({ next }: { next: () => void }) {
                             size={16}
                             className="animate-bounce" />
                     </p>
-                    <div className="flex items-center space-x-2 mb-6">
-                        <Checkbox id="saved" className="border-[#444444] data-[state=checked]:bg-[#a78bfa] data-[state=checked]:border-[#a78bfa]" />
-                        <label htmlFor="saved" className="text-gray-400 text-sm cursor-pointer">
-                            I saved my Secret Recovery Phrase
-                        </label>
-                    </div>
 
                     <Button
                         onClick={next}
